@@ -1,12 +1,16 @@
 package p2p
 
-import "net"
+import (
+	"fmt"
+	"net"
+	"sync"
+)
 
 type TCPTransport struct {
-	ListenAddress string
-	Listener net.Listener
+	listenAddress string
+	listener      net.Listener
 
-	mu 	  sync.RWMutex
+	mu    sync.RWMutex
 	peers map[net.Addr]Peer
 }
 
@@ -35,7 +39,6 @@ func (t *TCPTransport) startAcceptLoop() {
 		if err != nil {
 			fmt.Printf("TCP accept error: %s\n", err)
 		}
-	
 		go t.handleConn(conn)
 	}
 }
